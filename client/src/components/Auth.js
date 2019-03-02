@@ -112,7 +112,7 @@ class Auth extends Component {
 					}
 				</div>
 			</div>
-			);
+		);
 	}
 }
 

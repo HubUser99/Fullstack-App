@@ -1,0 +1,116 @@
+.App {
+	font-family: "SF Display";
+	min-height: 100vh;
+}
+
+.Menu {
+	height: 30px;
+	display: flex;
+	flex-direction: column;
+}
+
+a {
+	text-decoration: none;
+	color: white;
+	padding: 5px;
+	vertical-align: middle;
+}
+
+.Home > .Content {
+	height: 100vh;
+	width: 90vw;
+	margin: 0 auto;
+	padding-top: 50px;
+	margin-bottom: -80px;
+	background-color: white;
+}
+
+.Home .WelcomeText * {
+	display: inline;
+}
+
+.Home .WelcomeText sub h3 {
+	padding-left: 40%;
+}
+
+.Home .WelcomeText code {
+	width: 150px;
+	height: 35px;
+	margin-left: 10px;
+	color: green;
+	background-color: black;
+	overflow: hidden;
+	position: absolute;
+}
+
+.Home .WelcomeText code h1 {
+	animation-name: welcome_text;
+	animation-duration: 5s;
+	animation-iteration-count: infinite;
+	animation-timing-function: linear;
+}
+
+.Home .Description {
+	display: block;
+	width: 90%;
+	margin: 10%;
+}
+
+#bc-1 {
+	margin: 10%;
+	width: 50%;	
+}
+
+#bc-2 {
+	margin: 10%;
+	margin-left: 40%;
+	width: 50%;
+}
+
+#bc-3 {
+	margin: 10%;
+	width: 50%;	
+}
+
+.Counter {
+	height: calc(100vh - 20px);
+	background-color: black;
+	color: green;
+}
+
+.Counter .Content {
+	font-size: 40pt;
+	padding-left: 0;
+	padding-top: 40vh;
+	height: 100px;
+	text-align: center;
+}
+
+.Footer {
+	height: 20px;
+	background-color: black;
+	color: white;
+	text-align: right;
+	padding-right: 10px;
+}
+
+.Auth {
+	min-height: calc(100vh - 70px);
+	color: white;
+	text-align: center;
+}
+
+.Auth > .Content {
+	padding-top: 20vh;
+}
+
+@keyframes welcome_text {
+	0% { margin-left: 150px; }
+	100% { margin-left: -150px; }
+}
+
+@font-face {
+  font-family: "SF Display";
+  font-weight: 200;
+  src: url("https://sf.abarba.me/SF-UI-Display-Light.otf");
+}

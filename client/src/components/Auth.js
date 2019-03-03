@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from "axios";
 
 class Auth extends Component {
+
 	state = {
 		data: [],
 		id: 0,
@@ -26,7 +27,7 @@ class Auth extends Component {
 	}
 
 	getDataFromDb = () => {
-		fetch("http://localhost:3001/api/getData")
+		fetch(window.location.protocol + "//" + window.location.hostname + ":3001/api/getData")
 		.then(data => data.json())
 		.then(res => this.setState({ data: res.data }));
 	};
@@ -38,7 +39,7 @@ class Auth extends Component {
 			++idToBeAdded;
 		}
 
-		axios.post("http://localhost:3001/api/putData", {
+		axios.post(window.location.protocol + "//" + window.location.hostname + ":3001/api/putData", {
 			id: idToBeAdded,
 			username: username,
 			password: password
@@ -53,7 +54,7 @@ class Auth extends Component {
 			}
 		});
 
-		axios.delete("http://localhost:3001/api/deleteData", {
+		axios.delete(window.location.protocol + "//" + window.location.hostname + ":3001/api/deleteData", {
 			data: {
 				id: objIdToDelete
 			}
@@ -68,7 +69,7 @@ class Auth extends Component {
 			}
 		});
 
-		axios.post("http://localhost:3001/api/updateData", {
+		axios.post(window.location.protocol + "//" + window.location.hostname + ":3001/api/updateData", {
 			id: objIdToUpdate,
 			update: { message: updateToApply }
 		});

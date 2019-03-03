@@ -23,7 +23,7 @@ class Counter extends Component {
 	}
 
 	getDataFromDb = () => {
-		fetch("http://localhost:3001/api/getData")
+		fetch(window.location.protocol + "//" + window.location.hostname + ":3001/api/getData")
 		.then(data => data.json())
 		.then(res => this.setState({ data: res.data }));
 	};

@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import axios from "axios";
+import history from '../tools/history.js';
 
 class Auth extends Component {
 
 	state = {
+		valid: null,
 		data: [],
 		id: 0,
 		username: null,
@@ -75,9 +77,42 @@ class Auth extends Component {
 		});
 	};
 
+	validate = (hash, password, username) => {
+		axios.post(window.location.protocol + "//" + window.location.hostname + ":3001/api/validate", {
+			hash: hash,
+			password: password
+		})
+		.then((response) => {
+			this.setState({
+				valid: response.data.data
+			});
+			if (response.data.data) {
+				this.setSession(username);
+				history.push('/');
+			} else {
+				console.log("no");
+			}
+		})
+		.catch(function (error) {
+			console.log(error);
+		})
+	}
+
 	authorize = (username, password) => {
+		const users = this.state.data.map(x => x.username);
+		const hashes = this.state.data.map(x => x.password);
+		if (users.includes(username)) {
+			const hash = hashes[users.indexOf(username)];
+			this.validate(hash, password, username);
+		} else {
+			this.putDataToDB(username, password);
+			sessionStorage.setItem('username', username);
+			history.push('/');
+		}
+	}
+
+	setSession = (username) => {
 		sessionStorage.setItem('username', username);
-		this.putDataToDB(this.state.username, this.state.password);
 	}
 
 	render() {

@@ -36,7 +36,9 @@ class Counter extends Component {
 					<code>
 						{data.length <= 0
 							? "NO DB ENTRIES YET"
-							: "Counter: " + (parseInt(data[data.length - 1].id) + 1)
+							: sessionStorage.getItem('username') ?
+								"Counter: " + (parseInt(data[data.length - 1].id) + 1) :
+								"Please Log-in"
 						}
 					</code>
 				</div>

@@ -1,4 +1,5 @@
 const pass = require("./credentials").pass;
+const bcrypt = require('bcrypt');
 const mongoose = require("mongoose");
 const express = require("express");
 const bodyParser = require("body-parser");
@@ -76,24 +77,33 @@ router.post("/putData", (req, res, next) => {
   let data = new Data();
 
   const { id, username, password } = req.body;
-  console.log(username);
-  console.log(password);
-  console.log(id);
-
-
-  if ((!id && id !== 0) || !username || !password) {
-    return res.json({
-      success: false,
-      error: "INVALID INPUTS"
+  
+  bcrypt.hash(password, 10, function(err, hash) {
+    if ((!id && id !== 0) || !username || !hash) {
+      return res.json({
+        success: false,
+        error: "INVALID INPUTS"
+      });
+    }
+    data.username = username;
+    data.password = hash;
+    data.id = id;
+    data.save(err => {
+      if (err) return res.json({ success: false, error: err });
+      return res.json({ success: true });
     });
-  }
-  data.username = username;
-  data.password = password;
-  data.id = id;
-  data.save(err => {
-    if (err) return res.json({ success: false, error: err });
-    return res.json({ success: true });
   });
+});
+
+router.post("/validate", (req, res, next) => {
+  const { hash, password } = req.body;
+  console.log(hash + " " + password);
+  bcrypt.compare(password, hash, function(err, response) {
+    console.log(response);
+    valid = response;
+  });
+  console.log(valid);
+  return res.json({ data: valid});
 });
 
 // append /api for our http requests

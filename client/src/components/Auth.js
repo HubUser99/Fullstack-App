@@ -116,6 +116,12 @@ class Auth extends Component {
 		sessionStorage.setItem('username', username);
 	}
 
+	toggleLogin = () => {
+		this.setState({
+			login: !this.state.login
+		});
+	}
+
 	render() {
 		const { data } = this.state;
 		return (
@@ -129,13 +135,19 @@ class Auth extends Component {
 					</ul>
 					{sessionStorage.getItem('username') 
 						? "Hello " + sessionStorage.getItem('username')
-						: (this.state.login) 
-							? <Login 
-								authorize={this.authorize}
-							  />
-							: <Signup
-								putDataToDB={this.putDataToDB}
-							  />
+						: <div>
+							{(this.state.login) 
+								? <Login
+									authorize={this.authorize}
+								  />
+								: <Signup
+									putDataToDB={this.putDataToDB}
+								  />
+							}
+							<button onClick={this.toggleLogin}>
+								{ (this.state.login) ? "want to Signup?" : "want to Login?" }
+							</button>
+						  </div>
 					}
 				</div>
 			</div>

@@ -54,17 +54,18 @@ router.get("/getData", (req, res, next) => {
 router.post("/putData", (req, res, next) => {
   let data = new Data();
 
-  const { id, username, password } = req.body;
+  const { id, email, username, password } = req.body;
 
-  console.log(id, " ", username, " ", password);
+  console.log(id, email, username, password);
 
-  if ((!id && id !== 0) || !username || !password) {
+  if ((!id && id !== 0) || !email || !username || !password) {
     return res.json({
       success: false,
       error: "INVALID INPUTS"
     });
   }
   data.username = username;
+  data.email = email;
   data.password = password;
   data.id = id;
   data.save(err => {

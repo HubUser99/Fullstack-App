@@ -7,6 +7,7 @@ const SALT_WORK_FACTOR = 10;
 const DataSchema = new Schema(
   {
     id: { type: Number, required: true, index: { unique: true } },
+    email: { type: String, required: true, index: { unique: true } },
     username: { type: String, required: true, index: { unique: true } },
     password: { type: String, required: true }
 	

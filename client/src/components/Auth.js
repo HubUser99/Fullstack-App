@@ -15,7 +15,7 @@ class Auth extends Component {
 		intervalIsSet: false
 	};
 
-	componentDidMount() {
+	componentWillMount() {
 		this.getDataFromDb();
 		if (!this.state.intervalIsSet) {
 			let interval = setInterval(this.getDataFromDb, 1000);
@@ -36,7 +36,7 @@ class Auth extends Component {
 		.then(res => this.setState({ data: res.data }));
 	};
 
-	putDataToDB = (username, password) => {
+	putDataToDB = (email, username, password) => {
 		let currentIds = this.state.data.map(data => data.id);
 		let idToBeAdded = 0;
 		while (currentIds.includes(idToBeAdded)) {
@@ -45,6 +45,7 @@ class Auth extends Component {
 
 		axios.post(window.location.protocol + "//" + window.location.hostname + ":3001/api/putData", {
 			id: idToBeAdded,
+			email: email,
 			username: username,
 			password: password
 		})
@@ -52,6 +53,8 @@ class Auth extends Component {
 			if (response.data.success) {
 				this.setSession(username);
 				history.push('/');
+			} else {
+				alert("email or username is already in use");
 			}
 		})
 	};
@@ -78,7 +81,9 @@ class Auth extends Component {
 		})
 	}*/
 
-	authorize = async (username, password) => {
+	authorize = async (username, password, e) => {
+		e.preventDefault();
+
 		axios.post(window.location.protocol + "//" + window.location.hostname + ":3001/api/validate", {
 			username: username,
 			password: password

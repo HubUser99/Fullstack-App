@@ -5,6 +5,7 @@ import history from '../tools/history.js';
 class Menu extends Component {
 	logout = () => {
 		sessionStorage.removeItem('username');
+		sessionStorage.removeItem('valid');
 		this.forceUpdate();
 		history.push('/auth');
 	}

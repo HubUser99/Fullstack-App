@@ -1,11 +1,11 @@
 const pass = require("./credentials").pass;
-const bcrypt = require('bcrypt');
 const mongoose = require("mongoose");
 const express = require("express");
 const bodyParser = require("body-parser");
 const logger = require("morgan");
 const Data = require("./data");
 const { ObjectId } = require("mongodb");
+const assert = require('assert');
 
 const API_PORT = 3001;
 const app = express();
@@ -49,61 +49,49 @@ router.get("/getData", (req, res, next) => {
   });
 });
 
-// this is update method
-// this method overwrites existing data in our database
-router.post("/updateData", (req, res, next) => {
-  const { id, update } = req.body;
-  console.log(req.body);
-  Data.findOneAndUpdate({_id: ObjectId(id)}, {$set: update}, err => {
-    if (err) return res.json({ success: false, error: err });
-    return res.json({ success: true });
-  });
-});
-
-// this is delete method
-// this method removes existing data in our database
-router.delete("/deleteData", (req, res, next) => {
-  const { id } = req.body;
-  console.log(req.body);
-  Data.findOneAndDelete({_id: ObjectId(id)}, err => {
-    if (err) return res.send(err);
-    return res.json({ success: true });
-  });
-});
-
 // this is create methid
 // this method adds new data in our database
 router.post("/putData", (req, res, next) => {
   let data = new Data();
 
   const { id, username, password } = req.body;
-  
-  bcrypt.hash(password, 10, function(err, hash) {
-    if ((!id && id !== 0) || !username || !hash) {
-      return res.json({
-        success: false,
-        error: "INVALID INPUTS"
-      });
-    }
-    data.username = username;
-    data.password = hash;
-    data.id = id;
-    data.save(err => {
-      if (err) return res.json({ success: false, error: err });
-      return res.json({ success: true });
+
+  console.log(id, " ", username, " ", password);
+
+  if ((!id && id !== 0) || !username || !password) {
+    return res.json({
+      success: false,
+      error: "INVALID INPUTS"
     });
+  }
+  data.username = username;
+  data.password = password;
+  data.id = id;
+  data.save(err => {
+    if (err) return res.json({ success: false, error: err });
+    return res.json({ success: true });
   });
 });
 
 router.post("/validate", (req, res, next) => {
-  const { hash, password } = req.body;
-  console.log(hash + " " + password);
-  bcrypt.compare(password, hash, function(err, response) {
-    console.log(response);
-    valid = response;
+  let data = new Data();
+
+  const { username, password } = req.body;
+  console.log(username + "  " + password);
+
+  Data.findOne({ username }, (err, user) => {
+    if (err) throw err;
+    
+    if (user) {
+      user.comparePassword(password, function(err, isMatch) {
+        if (err) throw err;
+        console.log(password, isMatch); // -> Password123: true
+        return res.json({ valid: isMatch });
+      });
+    } else {
+      return res.json({ valid: false });
+    }
   });
-  console.log(valid);
-  return res.json({ data: valid});
 });
 
 // append /api for our http requests

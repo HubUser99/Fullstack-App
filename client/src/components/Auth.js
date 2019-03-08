@@ -1,15 +1,17 @@
 import React, { Component } from 'react';
+import Login from './Login.js';
+import Signup from './Signup.js';
+
 import axios from "axios";
 import history from '../tools/history.js';
 
 class Auth extends Component {
 
 	state = {
-		valid: null,
+		login: false,
+		valid: false,
 		data: [],
 		id: 0,
-		username: null,
-		password: null,
 		intervalIsSet: false
 	};
 
@@ -45,39 +47,16 @@ class Auth extends Component {
 			id: idToBeAdded,
 			username: username,
 			password: password
-		});
+		})
+		.then((response) => {
+			if (response.data.success) {
+				this.setSession(username);
+				history.push('/');
+			}
+		})
 	};
 
-	deleteFromDB = idTodelete => {
-		let objIdToDelete = null;
-		this.state.data.forEach(dat => {
-			if (dat.id === idTodelete) {
-				objIdToDelete = dat._id;
-			}
-		});
-
-		axios.delete(window.location.protocol + "//" + window.location.hostname + ":3001/api/deleteData", {
-			data: {
-				id: objIdToDelete
-			}
-		});
-	};
-
-	updateDB = (idToUpdate, updateToApply) => {
-		let objIdToUpdate = null;
-		this.state.data.forEach(dat => {
-			if (dat.id === idToUpdate) {
-				objIdToUpdate = dat._id;
-			}
-		});
-
-		axios.post(window.location.protocol + "//" + window.location.hostname + ":3001/api/updateData", {
-			id: objIdToUpdate,
-			update: { message: updateToApply }
-		});
-	};
-
-	validate = (hash, password, username) => {
+	/*validate = (hash, password, username) => {
 		axios.post(window.location.protocol + "//" + window.location.hostname + ":3001/api/validate", {
 			hash: hash,
 			password: password
@@ -86,7 +65,8 @@ class Auth extends Component {
 			this.setState({
 				valid: response.data.data
 			});
-			if (response.data.data) {
+
+			if (this.state.valid) {
 				this.setSession(username);
 				history.push('/');
 			} else {
@@ -96,10 +76,30 @@ class Auth extends Component {
 		.catch(function (error) {
 			console.log(error);
 		})
-	}
+	}*/
 
-	authorize = (username, password) => {
-		const users = this.state.data.map(x => x.username);
+	authorize = async (username, password) => {
+		axios.post(window.location.protocol + "//" + window.location.hostname + ":3001/api/validate", {
+			username: username,
+			password: password
+		})
+		.then((response) => {
+			this.setState({
+				valid: response.data.valid
+			});
+
+			if (this.state.valid) {
+				this.setSession(username);
+				history.push('/');
+			} else {
+				console.log("no");
+			}
+		})
+		.catch(function (error) {
+			console.log(error);
+		})
+
+		/*const users = this.state.data.map(x => x.username);
 		const hashes = this.state.data.map(x => x.password);
 		if (users.includes(username)) {
 			const hash = hashes[users.indexOf(username)];
@@ -108,7 +108,8 @@ class Auth extends Component {
 			this.putDataToDB(username, password);
 			sessionStorage.setItem('username', username);
 			history.push('/');
-		}
+		}*/
+
 	}
 
 	setSession = (username) => {
@@ -128,23 +129,13 @@ class Auth extends Component {
 					</ul>
 					{sessionStorage.getItem('username') 
 						? "Hello " + sessionStorage.getItem('username')
-						: <div style={{ padding: "10px" }}>
-						<input
-							type="text"
-							onChange={e => this.setState({ username: e.target.value })}
-							placeholder="username"
-							style={{ width: "200px" }}
-						/>
-						<input
-							type="text"
-							onChange={e => this.setState({ password: e.target.value })}
-							placeholder="password"
-							style={{ width: "200px" }}
-						/>
-						<button onClick={() => this.authorize(this.state.username, this.state.password)}>
-							ADD
-						</button>
-					</div> 
+						: (this.state.login) 
+							? <Login 
+								authorize={this.authorize}
+							  />
+							: <Signup
+								putDataToDB={this.putDataToDB}
+							  />
 					}
 				</div>
 			</div>

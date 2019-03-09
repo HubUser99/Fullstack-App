@@ -4,8 +4,11 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const logger = require("morgan");
 const Data = require("./data");
+const Token = require("./token");
 const { ObjectId } = require("mongodb");
 const assert = require('assert');
+const nodemailer = require('nodemailer');
+const crypto = require('crypto');
 
 const API_PORT = 3001;
 const app = express();
@@ -64,13 +67,42 @@ router.post("/putData", (req, res, next) => {
       error: "INVALID INPUTS"
     });
   }
+
   data.username = username;
   data.email = email;
   data.password = password;
   data.id = id;
   data.save(err => {
     if (err) return res.json({ success: false, error: err });
-    return res.json({ success: true });
+    
+    var token = new Token({ _userId: data._id, token: crypto.randomBytes(16).toString('hex') });
+    
+    token.save(err => {
+      if (err) return res.json({ success: false, error: err });
+      var transporter = nodemailer.createTransport({ service: 'Sendgrid', auth: { user: process.env.SENDGRID_USERNAME, pass: process.env.SENDGRID_PASSWORD } });
+      var mailOptions = { from: 'no-reply@usercount.com', to: data.email, subject: 'Account Verification Token', text: 'Hello,\n\n' + 'Please verify your account by clicking the link: \nhttp:\/\/' + req.headers.host + '\/api\/confirmation\/' + token.token + '.\n' };
+      transporter.sendMail(mailOptions, err => {
+        if (err) return res.json({ success: false, error: err });
+        res.status(200).send('A verification email has been sent to ' + data.email + '.');
+      });
+    });
+  });
+});
+
+router.get("/confirmation/:token", (req, res, next) => {
+  console.log(req.params);
+  Token.findOne({token: req.params.token}, (err, token) => {
+    if (!token) return res.status(400).send({ type: 'not-verified', msg: 'We were unable to find a valid token. Your token may have expired.' });
+    Data.findOne({_id: token._userId}, (err, data) => {
+      if (!data) return res.status(400).send({ msg: 'We were unable to find a user for this token.' });
+      if (data.isVerified) return res.status(400).send({ type: 'already-verified', msg: 'This user has already been verified.' });
+
+      data.isVerified = true;
+      data.save(function (err) {
+        if (err) { return res.status(500).send({ msg: err.message }); }
+        res.status(200).send("The account has been verified. Please log in.");
+      });
+    });
   });
 });
 
@@ -83,10 +115,14 @@ router.post("/validate", (req, res, next) => {
   Data.findOne({ username }, (err, user) => {
     if (err) throw err;
     
+    if (!user.isVerified) {
+      return res.status(500).send("The account is not verified yet.")
+    }
+
     if (user) {
       user.comparePassword(password, function(err, isMatch) {
         if (err) throw err;
-        console.log(password, isMatch); // -> Password123: true
+        console.log(password, isMatch);
         return res.json({ valid: isMatch });
       });
     } else {

@@ -50,36 +50,9 @@ class Auth extends Component {
 			password: password
 		})
 		.then((response) => {
-			if (response.data.success) {
-				this.setSession(username);
-				history.push('/');
-			} else {
-				alert("email or username is already in use");
-			}
+			alert(response.data);
 		})
 	};
-
-	/*validate = (hash, password, username) => {
-		axios.post(window.location.protocol + "//" + window.location.hostname + ":3001/api/validate", {
-			hash: hash,
-			password: password
-		})
-		.then((response) => {
-			this.setState({
-				valid: response.data.data
-			});
-
-			if (this.state.valid) {
-				this.setSession(username);
-				history.push('/');
-			} else {
-				console.log("no");
-			}
-		})
-		.catch(function (error) {
-			console.log(error);
-		})
-	}*/
 
 	authorize = async (username, password, e) => {
 		e.preventDefault();
@@ -97,24 +70,12 @@ class Auth extends Component {
 				this.setSession(username);
 				history.push('/');
 			} else {
-				console.log("no");
+				alert("username or password are incorrect");
 			}
 		})
 		.catch(function (error) {
 			console.log(error);
 		})
-
-		/*const users = this.state.data.map(x => x.username);
-		const hashes = this.state.data.map(x => x.password);
-		if (users.includes(username)) {
-			const hash = hashes[users.indexOf(username)];
-			this.validate(hash, password, username);
-		} else {
-			this.putDataToDB(username, password);
-			sessionStorage.setItem('username', username);
-			history.push('/');
-		}*/
-
 	}
 
 	setSession = (username) => {

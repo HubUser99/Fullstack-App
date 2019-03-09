@@ -14,10 +14,12 @@ class Menu extends Component {
 		return (
 			<div className="Menu">
 				<Link to="/"><code>Home</code></Link>
-				<Link to="/auth"><code>Auth</code></Link>
 				{sessionStorage.getItem('username')
-					? <a style={{cursor: 'pointer'}} onClick={ this.logout }><code>logout</code></a>
-					: ""
+					? <div>
+						<Link to="/profile"><code>Profile</code></Link><br/>
+						<a style={{cursor: 'pointer'}} onClick={ this.logout }><code>logout</code></a>
+					  </div>
+					: <Link to="/auth"><code>Auth</code></Link>
 				}
 			</div>
 		);

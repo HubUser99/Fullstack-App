@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Chart from 'chart.js';
 
 class Counter extends Component {
 	state = {
@@ -30,20 +31,21 @@ class Counter extends Component {
 
 	render() {
 		const { data } = this.state;
+
 		return (
 			<div className="Counter">
 				<div className="Content">
-					<code>
-						{data.length <= 0
-							? "NO DB ENTRIES YET"
-							: sessionStorage.getItem('username') ?
-								"Counter: " + (parseInt(data[data.length - 1].id) + 1) :
-								"Please Log-in"
-						}
-					</code>
+					{data.length <= 0
+						? "NO DB ENTRIES YET"
+						: sessionStorage.getItem('username') 
+							? <div>
+								<code>Counter: {parseInt(data[data.length - 1].id) + 1}</code>
+							  </div> 
+							: <code>Please Log-in</code>
+					}
 				</div>
 			</div>
-			);
+		);
 	}
 }
 

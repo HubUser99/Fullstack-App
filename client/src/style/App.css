@@ -18,7 +18,7 @@ a {
 
 .Home > .Content {
 	height: 100vh;
-	width: 90vw;
+	width: 88vw;
 	margin: 0 auto;
 	padding-top: 50px;
 	margin-bottom: -80px;
@@ -102,6 +102,19 @@ a {
 
 .Auth > .Content {
 	padding-top: 20vh;
+}
+
+.Profile {
+	text-align: center;
+	height: calc(100vh - 75px);
+}
+
+.Profile > h1 {
+	padding-top: 35vh;
+}
+
+.Profile > h1 > code {
+	color: green;
 }
 
 @keyframes welcome_text {

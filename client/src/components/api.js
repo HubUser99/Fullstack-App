@@ -13,6 +13,9 @@ export function deauthorize (username, session_id) {
 	})
 }
 
+//--------------------------------------------------------
+// Modules to be implemented instead of the ones used in Auth.js, Counter.js 
+
 export function getDataFromDb () {
 	fetch(window.location.protocol + "//" + window.location.hostname + ":3001/api/getData")
 	.then(data => data.json())

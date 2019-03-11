@@ -36,12 +36,12 @@ class Counter extends Component {
 			<div className="Counter">
 				<div className="Content">
 					{data.length <= 0
-						? "NO DB ENTRIES YET"
-						: sessionStorage.getItem('username') 
-							? <div>
-								<code>Counter: {parseInt(data[data.length - 1].id) + 1}</code>
-							  </div> 
-							: <code>Please Log-in</code>
+					? "NO DB ENTRIES YET"
+					: sessionStorage.getItem('username')
+					? <div>
+						<code>Counter: {parseInt(data[data.length - 1].id) + 1}</code>
+					</div>
+					: <code>Please Log-in</code>
 					}
 				</div>
 			</div>

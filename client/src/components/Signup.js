@@ -8,6 +8,10 @@ class Signup extends Component {
 		rep_password: null
 	}
 
+	componentDidMount(){
+		this.nameInput.focus();
+	}
+
 	signup = (e) => {
 		e.preventDefault();
 
@@ -21,9 +25,10 @@ class Signup extends Component {
 	render() {
 		return (
 			<div>
-				<form autoComplete="on">
-					<div style={{ padding: "10px" }}>
+				<div style={{ padding: "10px" }}>
+					<form autoComplete="on">
 						<input
+							ref={(input) => { this.nameInput = input; }}
 							type="email"
 							onChange={e => this.setState({ email: e.target.value })}
 							placeholder="email"
@@ -56,8 +61,8 @@ class Signup extends Component {
 						<button type="button" onClick={(e) => this.signup(e)}>
 							SignUp
 						</button>
-					</div>
-				</form>
+					</form>
+				</div>
 			</div>
 		);
 	}

@@ -5,16 +5,18 @@ const SALT_WORK_FACTOR = 10;
 
 // this will be our data base's data structure 
 const DataSchema = new Schema(
-	{
-		id: { type: Number, required: true, index: { unique: true } },
-		email: { type: String, required: true, index: { unique: true } },
-		username: { type: String, required: true, index: { unique: true } },
-		isVerified: { type: Boolean, default: false },
-		password: { type: String, required: true },
-		passwordResetToken: { type: String },
-		passwordResetExpires: { type: Date }
-	},
-	{ timestamps: true }
+{
+	id: { type: Number, required: true, index: { unique: true } },
+	email: { type: String, required: true, index: { unique: true } },
+	username: { type: String, required: true, index: { unique: true } },
+	isVerified: { type: Boolean, default: false },
+	password: { type: String, required: true },
+	passwordResetToken: { type: String },
+	passwordResetExpires: { type: Date },
+	session_id: { type: String, default: null },
+	active: { type: Boolean, default: false }
+},
+{ timestamps: true }
 );
 
 DataSchema.pre('save', function(next) {

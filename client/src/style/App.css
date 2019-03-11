@@ -127,3 +127,33 @@ a {
   font-weight: 200;
   src: url("https://sf.abarba.me/SF-UI-Display-Light.otf");
 }
+
+@media (max-width: 600px) {
+	.Home .WelcomeText sub h3 {
+		padding-left: 2%;
+	}
+
+	.Home > .Content {
+		width: 88vw;
+		margin: 0 20% auto;
+		height: 80vh;
+	}
+
+	.Counter .Content {
+		font-size: 30pt;
+	}
+
+	.Counter {
+		height: 100vh;
+	}
+
+	.Home .WelcomeText code {
+		width: 140px;
+		height: 35px;
+		margin-left: 10px;
+		color: green;
+		background-color: black;
+		overflow: hidden;
+		position: absolute;
+	}
+}

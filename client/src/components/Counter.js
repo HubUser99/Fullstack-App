@@ -3,7 +3,7 @@ import Chart from 'chart.js';
 
 class Counter extends Component {
 	state = {
-		data: [],
+		lastUser: {},
 		id: 0,
 		intervalIsSet: false
 	}
@@ -24,22 +24,22 @@ class Counter extends Component {
 	}
 
 	getDataFromDb = () => {
-		fetch(window.location.protocol + "//" + window.location.hostname + ":3001/api/getData")
+		fetch(window.location.protocol + "//" + window.location.hostname + ":3001/api/getLast")
 		.then(data => data.json())
-		.then(res => this.setState({ data: res.data }));
+		.then(res => this.setState({ lastUser: {username: res.username, id: res.id} }));
 	};
 
 	render() {
-		const { data } = this.state;
+		const { lastUser } = this.state;
 
 		return (
 			<div className="Counter">
 				<div className="Content">
-					{data.length <= 0
+					{lastUser.length <= 0
 					? "NO DB ENTRIES YET"
 					: sessionStorage.getItem('username')
 					? <div>
-						<code>Counter: {parseInt(data[data.length - 1].id) + 1}</code>
+						<code>Counter: {parseInt(lastUser.id) + 1}</code>
 					</div>
 					: <code>Please Log-in</code>
 					}

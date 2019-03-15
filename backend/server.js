@@ -48,6 +48,7 @@ app.use((req, res, next) => {
 	next();
 });
 
+/*
 // this is get method
 // this method fetches all available data in our database
 router.get("/getData", (req, res, next) => {
@@ -55,6 +56,19 @@ router.get("/getData", (req, res, next) => {
 		if (err) return res.json({ success: false, error: err });
 		return res.json({ success: true, data: data });
 	});
+});
+*/
+
+router.get("/getLast", (req, res, next) => {
+	Data.
+		findOne({}).
+		sort({ id: -1 }).
+		select({ username: 1, id: 1 }).
+		exec(function (err, data) {
+			if (err) return res.json({ success: false, error: err });
+			console.log(data);
+			return res.json({ success: true, username: data.username, id: data.id });
+		});
 });
 
 // this is create method

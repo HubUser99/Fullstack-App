@@ -9,7 +9,7 @@ class Auth extends Component {
 
 	state = {
 		login: true,
-		data: [],
+		lastUser: {},
 		id: 0,
 		intervalIsSet: false
 	};
@@ -30,17 +30,14 @@ class Auth extends Component {
 	}
 
 	getDataFromDb = () => {
-		fetch(window.location.protocol + "//" + window.location.hostname + ":3001/api/getData")
+		fetch(window.location.protocol + "//" + window.location.hostname + ":3001/api/getLast")
 		.then(data => data.json())
-		.then(res => this.setState({ data: res.data }));
+		.then(res => this.setState({ lastUser: {username: res.username, id: res.id} }));
 	};
 
 	putDataToDB = (email, username, password) => {
-		let currentIds = this.state.data.map(data => data.id);
-		let idToBeAdded = 0;
-		while (currentIds.includes(idToBeAdded)) {
-			++idToBeAdded;
-		}
+		let lastId = this.state.lastUser.id;
+		let idToBeAdded = ++lastId;
 
 		axios.post(window.location.protocol + "//" + window.location.hostname + ":3001/api/putData", {
 			id: idToBeAdded,
@@ -90,14 +87,14 @@ class Auth extends Component {
 	}
 
 	render() {
-		const { data } = this.state;
+		const { lastUser } = this.state;
 		return (
 			<div className="Auth">
 				<div className="Content">
 					<ul>
-						{data.length <= 0
+						{lastUser.id <= 0
 						? "NO DB ENTRIES YET"
-						: "Last registered user: " + data[data.length - 1].username
+						: "Last registered user: " + lastUser.username
 						}
 					</ul>
 					{sessionStorage.getItem('session_id')

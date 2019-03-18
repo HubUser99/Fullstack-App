@@ -1,17 +1,23 @@
 import React, { Component } from 'react';
-import Chart from 'chart.js';
+import { getDataFromDb } from './api.js';
 
 class Counter extends Component {
-	state = {
-		lastUser: {},
-		id: 0,
-		intervalIsSet: false
+	constructor(props) {
+		super(props);
+
+		this.state = {
+			lastUser: {},
+			id: 0,
+			intervalIsSet: false
+		};
+
+		this.updateState = this.updateState.bind(this);
 	}
 
-	componentDidMount() {
-		this.getDataFromDb();
+	componentWillMount() {
+		this.updateState();
 		if (!this.state.intervalIsSet) {
-			let interval = setInterval(this.getDataFromDb, 1000);
+			let interval = setInterval(this.updateState, 1000);
 			this.setState({ intervalIsSet: interval });
 		}
 	}
@@ -23,11 +29,9 @@ class Counter extends Component {
 		}
 	}
 
-	getDataFromDb = () => {
-		fetch(window.location.protocol + "//" + window.location.hostname + ":3001/api/getLast")
-		.then(data => data.json())
-		.then(res => this.setState({ lastUser: {username: res.username, id: res.id} }));
-	};
+	updateState() {
+		getDataFromDb(this);
+	}
 
 	render() {
 		const { lastUser } = this.state;

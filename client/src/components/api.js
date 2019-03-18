@@ -1,4 +1,5 @@
 import axios from 'axios';
+import history from '../tools/history.js';
 
 export function deauthorize (username, session_id) {
 	axios.post(window.location.protocol + "//" + window.location.hostname + ":3001/api/logout", {
@@ -16,18 +17,21 @@ export function deauthorize (username, session_id) {
 //--------------------------------------------------------
 // Modules to be implemented instead of the ones used in Auth.js, Counter.js 
 
-export function getDataFromDb () {
-	fetch(window.location.protocol + "//" + window.location.hostname + ":3001/api/getData")
+export function getDataFromDb (_this) {
+	fetch(window.location.protocol + "//" + window.location.hostname + ":3001/api/getLast")
 	.then(data => data.json())
-	.then(res => {return res.data;});
+	.then(res => {
+		console.log(res);
+		_this.setState({
+			lastUser: { username: res.username, id: res.id }
+		});
+	})
+	.catch(error => console.log(error));
 };
 
-export function putDataToDB (email, username, password) {
-	let currentIds = this.state.data.map(data => data.id);
-	let idToBeAdded = 0;
-	while (currentIds.includes(idToBeAdded)) {
-		++idToBeAdded;
-	}
+export function putDataToDB (lastUser, email, username, password) {
+	let lastId = lastUser.id;
+	let idToBeAdded = ++lastId;
 
 	axios.post(window.location.protocol + "//" + window.location.hostname + ":3001/api/putData", {
 		id: idToBeAdded,
@@ -36,8 +40,15 @@ export function putDataToDB (email, username, password) {
 		password: password
 	})
 	.then((response) => {
-		alert(response.data);
+		if (response.data.text) {
+			alert(response.data.text);
+		} else {
+			alert(response.data.error);
+		}
 	})
+	.catch(error => {
+		alert(error);
+	});
 };
 
 export function authorize (username, password, e) {
@@ -54,8 +65,8 @@ export function authorize (username, password, e) {
 		console.log(session_id);
 
 		if (valid) {
-			this.setSession(username, session_id);
-			//history.push('/');
+			setSession(username, session_id);
+			history.push('/');
 		} else {
 			alert(response.data.error);
 		}
@@ -63,4 +74,9 @@ export function authorize (username, password, e) {
 	.catch((error) => {
 		console.log(error);
 	})
+}
+
+function setSession (username, session_id) {
+	sessionStorage.setItem('session_id', session_id);
+	sessionStorage.setItem('username', username);
 }

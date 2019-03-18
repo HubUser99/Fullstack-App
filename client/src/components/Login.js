@@ -22,7 +22,6 @@ class Login extends Component {
 						onChange={e => this.setState({ username: e.target.value })}
 						placeholder="username"
 						style={{ width: "200px" }}
-						autofocus
 						/>
 						<br/>
 						<input

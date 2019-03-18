@@ -1,11 +1,17 @@
 import React, { Component } from 'react';
 
 class Signup extends Component {
-	state = {
-		email: null,
-		username: null,
-		password: null,
-		rep_password: null
+	constructor(props) {
+		super(props);
+		
+		this.state = {
+			email: null,
+			username: null,
+			password: null,
+			rep_password: null,
+		}
+
+		this.putDataToDB = this.props.putDataToDB.bind(this);
 	}
 
 	componentDidMount(){
@@ -16,7 +22,7 @@ class Signup extends Component {
 		e.preventDefault();
 
 		if (this.state.password === this.state.rep_password) {
-			this.props.putDataToDB(this.state.email ,this.state.username, this.state.password)
+			this.props.putDataToDB(this.props.lastUser, this.state.email ,this.state.username, this.state.password)
 		} else {
 			alert("repeat password correctly");
 		}

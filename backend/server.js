@@ -9,6 +9,7 @@ const { ObjectId } = require("mongodb");
 const assert = require('assert');
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
+const validator = require('validator');
 
 const GLOBAL_IP = '::ffff:192.168.0.105';
 const API_PORT = 3001;
@@ -38,7 +39,7 @@ app.use(bodyParser.json());
 app.use(logger("dev"));
 app.use((req, res, next) => {
 	res.header("Access-Control-Allow-Origin", "*");
-	res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+	res.header('Adccess-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
 	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 	next();
 });
@@ -67,7 +68,10 @@ router.get("/getLast", (req, res, next) => {
 		exec(function (err, data) {
 			if (err) return res.json({ success: false, error: err });
 			console.log(data);
-			return res.json({ success: true, username: data.username, id: data.id });
+			if (data)
+				return res.json({ success: true, username: data.username, id: data.id });
+			else
+				return res.json({ success: true, username: "None", id: -1 });
 		});
 });
 
@@ -87,6 +91,13 @@ router.post("/putData", (req, res, next) => {
 		});
 	}
 
+	if (!validator.isEmail(email)) {
+		return res.json({
+			success: false,
+			error: "INVALID EMAIL"
+		});
+	}
+
 	data.username = username;
 	data.email = email;
 	data.password = password;
@@ -102,7 +113,7 @@ router.post("/putData", (req, res, next) => {
 			var mailOptions = { from: 'no-reply@usercount.com', to: data.email, subject: 'Account Verification Token', text: 'Hello,\n\n' + 'Please verify your account by clicking the link: \nhttp:\/\/' + req.headers.host + '\/api\/confirmation\/' + token.token + '.\n' };
 			transporter.sendMail(mailOptions, err => {
 				if (err) return res.json({ success: false, error: err });
-				res.status(200).send('A verification email has been sent to ' + data.email + '.');
+				res.json({ text: 'A verification email has been sent to ' + data.email + '.' });
 			});
 		});
 	});

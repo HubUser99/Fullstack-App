@@ -1,14 +1,3 @@
-.App {
-	font-family: "SF Display";
-	min-height: 100vh;
-}
-
-.Menu {
-	height: 30px;
-	display: flex;
-	flex-direction: column;
-}
-
 a {
 	text-decoration: none;
 	color: white;
@@ -16,26 +5,13 @@ a {
 	vertical-align: middle;
 }
 
-.Home > .Content {
-	height: 100vh;
-	width: 88vw;
-	margin: 0 auto;
-	padding-top: 50px;
-	margin-bottom: -80px;
-	background-color: white;
-}
-
 .Home .WelcomeText * {
 	display: inline;
 }
 
-.Home .WelcomeText sub h3 {
-	padding-left: 40%;
-}
-
 .Home .WelcomeText code {
 	width: 150px;
-	height: 35px;
+	height: 23px;
 	margin-left: 10px;
 	color: green;
 	background-color: black;
@@ -79,7 +55,7 @@ a {
 }
 
 .Counter .Content {
-	font-size: 40pt;
+	font-size: 30pt;
 	padding-left: 0;
 	padding-top: 40vh;
 	height: 100px;
@@ -104,15 +80,6 @@ a {
 	padding-top: 20vh;
 }
 
-.Profile {
-	text-align: center;
-	height: calc(100vh - 75px);
-}
-
-.Profile > h1 {
-	padding-top: 35vh;
-}
-
 .Profile > h1 > code {
 	color: green;
 }
@@ -120,40 +87,4 @@ a {
 @keyframes welcome_text {
 	0% { margin-left: 150px; }
 	100% { margin-left: -150px; }
-}
-
-@font-face {
-  font-family: "SF Display";
-  font-weight: 200;
-  src: url("https://sf.abarba.me/SF-UI-Display-Light.otf");
-}
-
-@media (max-width: 600px) {
-	.Home .WelcomeText sub h3 {
-		padding-left: 2%;
-	}
-
-	.Home > .Content {
-		width: 88vw;
-		margin: 0 20% auto;
-		height: 80vh;
-	}
-
-	.Counter .Content {
-		font-size: 30pt;
-	}
-
-	.Counter {
-		height: 100vh;
-	}
-
-	.Home .WelcomeText code {
-		width: 140px;
-		height: 35px;
-		margin-left: 10px;
-		color: green;
-		background-color: black;
-		overflow: hidden;
-		position: absolute;
-	}
 }

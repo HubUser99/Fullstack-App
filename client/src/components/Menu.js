@@ -1,7 +1,15 @@
 import React, { Component } from 'react';
 import Link from "react-router-dom/Link";
 import history from '../tools/history.js';
+import { withStyles } from '@material-ui/core/styles';
 import { deauthorize } from './api.js';
+
+const styles = theme => ({
+	root: {
+		backgroundColor: 'black',
+		position: 'fixed',
+	},
+});
 
 class Menu extends Component {
 	logout = () => {
@@ -14,12 +22,12 @@ class Menu extends Component {
 
 	render() {
 		return (
-			<div className="Menu">
+			<div className={this.props.classes.root}>
 				<Link to="/"><code>Home</code></Link>
 				{sessionStorage.getItem('session_id')
 				? <div>
 					<Link to="/profile"><code>Profile</code></Link><br/>
-					<a style={{cursor: 'pointer'}} onClick={ this.logout }><code>logout</code></a>
+					<a style={{cursor: 'pointer'}} onClick={ this.logout }><code>Logout</code></a>
 				</div>
 				: <Link to="/auth"><code>Auth</code></Link>
 				}
@@ -28,4 +36,4 @@ class Menu extends Component {
 	}
 }
 
-export default Menu;
+export default withStyles(styles)(Menu);

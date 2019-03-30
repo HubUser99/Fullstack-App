@@ -1,10 +1,19 @@
 import React, { Component } from 'react';
 import Login from './Login.js';
 import Signup from './Signup.js';
+import { withStyles } from '@material-ui/core/styles';
 
-import axios from "axios";
-import history from '../tools/history.js';
 import { getDataFromDb, authorize, putDataToDB } from './api.js';
+
+const styles = theme => ({
+	root: {
+		
+	},
+	content: {
+		paddingTop: '100px',
+		height: 'calc(100vh - 20px)',
+	},
+});
 
 class Auth extends Component {
 
@@ -48,8 +57,8 @@ class Auth extends Component {
 	render() {
 		const { lastUser } = this.state;
 		return (
-			<div className="Auth">
-				<div className="Content">
+			<div className={this.props.classes.root}>
+				<div className={this.props.classes.content}>
 					<ul>
 						{lastUser.id < 0
 						? "NO DB ENTRIES YET"
@@ -79,4 +88,4 @@ class Auth extends Component {
 	}
 }
 
-export default Auth;
+export default withStyles(styles)(Auth);

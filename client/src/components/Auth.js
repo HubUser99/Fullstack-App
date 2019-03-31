@@ -52,7 +52,7 @@ class Auth extends Component {
 		this.setState({
 			login: !this.state.login
 		});
-	}
+	};
 
 	render() {
 		const { lastUser } = this.state;

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/core/styles';
-
 import Counter from './Counter.js';
 
 const styles = theme => ({
@@ -11,10 +10,23 @@ const styles = theme => ({
 	content: {
 		paddingTop: '100px',
 		height: '100vh',
+		'@global': {
+			code: {
+				width: '150px',
+				height: '35px',
+				marginLeft: '10px',
+				color: 'green',
+				backgroundColor: 'black',
+				overflow: 'hidden',
+				position: 'absolute',
+			},
+			
+		}
 	},
 	note: {
-		marginTop: '50px',
-		marginBottom: '25px',
+		marginTop: '100px',
+		marginBottom: '50px',
+		fontSize: '15pt',
 	},
 });
 
@@ -30,31 +42,31 @@ class Home extends Component {
 					<Grid item className={this.props.classes.content} xs={8} sm={10} md={10}>
 						<Grid container justify="center">
 							<Grid item className="WelcomeText" xs={12} sm={4} md={3}>
-								<sub><h3>Welcome to </h3></sub>
+								<h3>Welcome to</h3>
 								<code><h1>usercount</h1></code> 
 								<br/>
 							</Grid>
 						</Grid>
 						<Grid container justify="flex-start">
 							<Grid item xs={12} sm={4}>
-								<p className={this.props.classes.note}>
+								<div className={this.props.classes.note}>
 									Usercount is a service which main function is to count how many users have
 									registered to it.
-								</p>
+								</div>
 							</Grid>
 						</Grid>
 						<Grid container justify="center">
 							<Grid item xs={12} sm={4}>
-								<p className={this.props.classes.note}>
+								<div className={this.props.classes.note}>
 									Counter of registered users you can see below.
-								</p>
+								</div>
 							</Grid>
 						</Grid>
 						<Grid container justify="flex-end">
 							<Grid item xs={12} sm={4}>
-								<p className={this.props.classes.note}>
+								<div className={this.props.classes.note}>
 									Register yourself and make impact on the counter!
-								</p>
+								</div>
 							</Grid>
 						</Grid>
 					</Grid>

@@ -9,16 +9,6 @@ a {
 	display: inline;
 }
 
-.Home .WelcomeText code {
-	width: 150px;
-	height: 23px;
-	margin-left: 10px;
-	color: green;
-	background-color: black;
-	overflow: hidden;
-	position: absolute;
-}
-
 .Home .WelcomeText code h1 {
 	animation-name: welcome_text;
 	animation-duration: 5s;
@@ -34,7 +24,7 @@ a {
 
 #bc-1 {
 	margin: 10%;
-	width: 50%;	
+	width: 50%;
 }
 
 #bc-2 {
